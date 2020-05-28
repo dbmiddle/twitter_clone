@@ -1,0 +1,28 @@
+<h1>Twitter Clone</h1>
+
+
+
+<div id='usercard' style='border: 1px solid black; height: 150px; width: 200px'>
+    <p>{{ request.user }}</p>
+    <p><a href='/twitteruser/{{ request.user.id }}/'>@{{ request.user }}</a></p>
+    <p>Tweets:</p>
+    <p>Following:</p>
+</div>
+
+<div id='alltweets'>
+    <h3>What's happening?</h3>
+    <a href='/compose/'>New Tweet</a>
+    {% for message in tweet %}
+        <ul>
+            <li>
+                <a href='/twitteruser/{{ tweet_author.id }}/'>{{ tweet_author }}</a> - <a href='/tweet/{{ message.id }}/'>{{ message.date }}</a>
+                <ul>
+                    <li>
+                        {{ message.body }}
+                    </li>
+                </ul>
+            
+            </li>
+        </ul>
+    {% endfor %}
+</div>
