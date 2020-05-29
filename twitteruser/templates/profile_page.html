@@ -13,15 +13,17 @@
     <p>Following: </p>
     </br>
     {% if request.user != otheruser %}
-    <p><a href='/follow/{{ otheruser.id }}/'><button>Follow</button></a></p>
+        <p><a href='/follow/{{ otheruser.id }}/'><button style='color: green'>Follow</button></a></p>
+        <p><a href='/unfollow/{{ otheruser.id }}/'><button style='color: red'>Unfollow</button></a></p>
     {% endif %}
 </div>
     </br>
     </br>
     </br>
-
+    </br>
+    </br>
 <div id='alltweets'>
-    <h3>{{ user }}'s Tweets</h3>
+    <h3>{{ otheruser }}'s Tweets</h3>
     {% for message in tweetdetail %}
         <ul>
             <li>

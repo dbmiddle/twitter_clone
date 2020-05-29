@@ -25,11 +25,13 @@ def follow(request, id):
     user_to_follow = MyUser.objects.get(id=id)
     current_user = MyUser.objects.get(id=request.user.id)
     current_user.following.add(user_to_follow)
-    return HttpResponseRedirect(reverse('profilepage'))
+    current_user.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def unfollow(request, id):
     user_to_unfollow = MyUser.objects.get(id=id)
     current_user = MyUser.objects.get(id=request.user.id)
     current_user.following.remove(user_to_unfollow)
-    return HttpResponseRedirect(reverse('profilepage'))
+    current_user.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

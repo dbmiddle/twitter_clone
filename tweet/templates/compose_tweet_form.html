@@ -1,6 +1,22 @@
-<h3>What's going on?</h3>
-<form action='' method='post'>
+<h1 style='text-align: center'>Twitter Clone</h1>
+<div id='navdiv' style='text-align: center'>
+    {% include 'navigation.html' %}
+</div>
+
+
+<div id='container' style='display: flex; justify-content: center; justify-content: space-around'>
+<div id='usercard' style='border: 1px solid black; height: 150px; width: 200px;'>
+    <p>{{ request.user }}</p>
+    <p><a href='/twitteruser/{{ request.user.id }}/'>@{{ request.user }}</a></p>
+    <p>Tweets:</p>
+    <p>Following: {{ user.following.count }}</p>
+</div>
+<div id='composetweets'>
+    <h3>What's going on?</h3>
+    <form action='' method='post'>
     {% csrf_token %}
     {{ form.as_p }}
     <input type='submit' value='Tweet'>
 </form>
+</div>
+</div>
