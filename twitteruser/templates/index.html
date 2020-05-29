@@ -1,21 +1,24 @@
-<h1>Twitter Clone</h1>
+<h1 style='text-align: center'>Twitter Clone</h1>
+<div id='navdiv' style='text-align: center'>
+    {% include 'navigation.html' %}
+</div>
 
 
-
-<div id='usercard' style='border: 1px solid black; height: 150px; width: 200px'>
+<div id='container' style='display: flex; justify-content: center; justify-content: space-around'>
+<div id='usercard' style='border: 1px solid black; height: 150px; width: 200px;'>
     <p>{{ request.user }}</p>
     <p><a href='/twitteruser/{{ request.user.id }}/'>@{{ request.user }}</a></p>
     <p>Tweets:</p>
-    <p>Following:</p>
+    <p>Following: {{ user.following.count }}</p>
 </div>
 
 <div id='alltweets'>
     <h3>What's happening?</h3>
     <a href='/compose/'>New Tweet</a>
-    {% for message in tweet %}
+    {% for message in tweetdetail %}
         <ul>
             <li>
-                <a href='/twitteruser/{{ tweet_author.id }}/'>{{ tweet_author }}</a> - <a href='/tweet/{{ message.id }}/'>{{ message.date }}</a>
+                <a href='/twitteruser/{{ message.tweet_author.id }}/'>{{ message.tweet_author.username }}</a> - <a href='/tweet/{{ message.id }}/'>{{ message.date }}</a>
                 <ul>
                     <li>
                         {{ message.body }}
@@ -25,4 +28,5 @@
             </li>
         </ul>
     {% endfor %}
+</div>
 </div>

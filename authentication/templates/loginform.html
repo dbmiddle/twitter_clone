@@ -1,7 +1,9 @@
 <h3>Login</h3>
-
+<a href='/'>Home</a>
 <form action='' method='post'>
     {% csrf_token %}
     {{ form.as_p }}
     <input type='submit' value='Submit'>
 </form>
+
+<p>New User? Sign up <a href='/signup/'>here</a>

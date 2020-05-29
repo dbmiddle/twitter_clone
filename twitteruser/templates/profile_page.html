@@ -1,1 +1,38 @@
-<h3>{{ user }}'s Profile page</h3>
+<h3>{{ otheruser }}'s Profile page</h3>
+
+<nav>
+    <a href='/'>Home</a>
+    <a href='/logout/'>Logout</a>
+</nav>
+
+
+<div id='usercard' style='border: 1px solid black; height: 150px; width: 200px'>
+    <p>{{ otheruser }}</p>
+    <p><a href='/twitteruser/{{ otheruser.id }}/'>@{{ otheruser }}</a></p>
+    <p>Tweets:</p>
+    <p>Following: </p>
+    </br>
+    {% if request.user != otheruser %}
+    <p><a href='/follow/{{ otheruser.id }}/'><button>Follow</button></a></p>
+    {% endif %}
+</div>
+    </br>
+    </br>
+    </br>
+
+<div id='alltweets'>
+    <h3>{{ user }}'s Tweets</h3>
+    {% for message in tweetdetail %}
+        <ul>
+            <li>
+                <a href='/twitteruser/{{ message.tweet_author.id }}/'>{{ message.tweet_author.username }}</a> - <a href='/tweet/{{ message.id }}/'>{{ message.date }}</a>
+                <ul>
+                    <li>
+                        {{ message.body }}
+                    </li>
+                </ul>
+            
+            </li>
+        </ul>
+    {% endfor %}
+</div>

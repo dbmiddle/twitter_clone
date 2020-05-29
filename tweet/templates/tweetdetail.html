@@ -1,11 +1,10 @@
         <ul>
             <li>
-                <a href='/twitteruser/{{ tweetdetail.tweet_author.id }}/'>{{ tweetdetail.tweet_author }}</a> - {{ tweetdetail.date }}
+                <a href='/twitteruser/{{ tweetdetail.tweet_author.id }}/'>{{ tweetdetail.tweet_author.username }}</a> - {{ tweetdetail.date }}
                 <ul>
                     <li>
                         {{tweetdetail.body }}
                     </li>
                 </ul>
-            
             </li>
         </ul>

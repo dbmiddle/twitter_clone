@@ -14,8 +14,11 @@ def compose(request):
 
     if request.method == 'POST':
         form = TweetForm(request.POST)
-        form.save()
-        
+        if form.is_valid():
+            tweet = form.save(commit=False)
+            tweet.tweet_author = MyUser.objects.get(id=request.user.id)
+            tweet.save()
+
         return HttpResponseRedirect(reverse('homepage'))
     form = TweetForm()
 
@@ -24,4 +27,5 @@ def compose(request):
 
 def tweetdetail(request, tweetdetail_id):
     tweetdetail = Tweet.objects.get(id=tweetdetail_id)
+    # tweet_author = MyUser.objects.all()
     return render(request, 'tweetdetail.html', {'tweetdetail': tweetdetail})
