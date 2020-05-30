@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import reverse
 from django.shortcuts import HttpResponseRedirect
 
 from twitteruser.models import MyUser
 from tweet.models import Tweet
+from notification.models import Notification
 
 # Create your views here.
 
@@ -12,19 +12,21 @@ from tweet.models import Tweet
 @login_required
 def index(request):
     tweetdetail = Tweet.objects.all()
-    return render(request, 'index.html', {'tweetdetail': tweetdetail})
+    tweetcount = Tweet.objects.filter(tweet_author=request.user)
+    return render(request, 'index.html', {'tweetdetail': tweetdetail, 'tweetcount': tweetcount})
 
 
 def profile_page(request, id):
     otheruser = MyUser.objects.get(id=id)
     tweetdetail = Tweet.objects.filter(tweet_author=otheruser)
-    return render(request, 'profile_page.html', {'otheruser': otheruser, 'tweetdetail': tweetdetail})
+    tweetcount = Tweet.objects.filter(tweet_author=request.user)
+    return render(request, 'profile_page.html', {'otheruser': otheruser, 'tweetdetail': tweetdetail, 'tweetcount': tweetcount})
 
 
 def follow(request, id):
     user_to_follow = MyUser.objects.get(id=id)
     current_user = MyUser.objects.get(id=request.user.id)
-    current_user.following.add(user_to_follow)
+    current_user.followingg.add(user_to_follow)
     current_user.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -32,6 +34,12 @@ def follow(request, id):
 def unfollow(request, id):
     user_to_unfollow = MyUser.objects.get(id=id)
     current_user = MyUser.objects.get(id=request.user.id)
-    current_user.following.remove(user_to_unfollow)
+    current_user.followingg.remove(user_to_unfollow)
     current_user.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def notif_count(request):
+    current_user = MyUser.objects.get(username=request.user)
+    notification = Notification.objects.filter(receiving_user=current_user)
+    return render(request, 'navigation.html', {'notification': notification})

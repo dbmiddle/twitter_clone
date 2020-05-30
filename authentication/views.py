@@ -48,7 +48,8 @@ def signup(request):
         if form.is_valid():
             data = form.cleaned_data
             user = MyUser.objects.create_user(
-                data['user_name'], data['password1']
+                username=data['user_name'],
+                password=data['password1']
             )
             login(request, user)
             return HttpResponseRedirect(reverse('homepage'))

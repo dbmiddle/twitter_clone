@@ -1,16 +1,20 @@
 <h3>{{ otheruser }}'s Profile page</h3>
 
-<nav>
-    <a href='/'>Home</a>
-    <a href='/logout/'>Logout</a>
-</nav>
-
-
+{% include 'navigation.html'%}
+</br>
 <div id='usercard' style='border: 1px solid black; height: 150px; width: 200px'>
     <p>{{ otheruser }}</p>
     <p><a href='/twitteruser/{{ otheruser.id }}/'>@{{ otheruser }}</a></p>
-    <p>Tweets:</p>
-    <p>Following: </p>
+    {% if request.user == otheruser %}
+    <p>Tweets: {{tweetcount.count }}</p>
+    {% else %}
+    <p>Tweets: {{tweetdetail.count}}</p>
+    {% endif %}
+    {% if request.user == otheruser %}
+    <p>Following: {{ request.user.followingg.count }}</p>
+    {% else %}
+    <p>Following: {{ otheruser.followingg.count }}</p>
+    {% endif %}
     </br>
     {% if request.user != otheruser %}
         <p><a href='/follow/{{ otheruser.id }}/'><button style='color: green'>Follow</button></a></p>
