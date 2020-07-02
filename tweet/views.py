@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import reverse
 from django.shortcuts import HttpResponseRedirect
+from django.views.generic.detail import View
+from django.views.generic.detail import DetailView
 
 from tweet.forms import TweetForm
 from tweet.models import Tweet
@@ -23,23 +25,29 @@ def notify_user(tweet):
         )
 
 
-def compose(request):
-    html = 'compose_tweet_form.html'
+# class-based view form conversion
+class Compose(View):
 
-    if request.method == 'POST':
+    def post(self, request, *args, **kwargs):
         form = TweetForm(request.POST)
-        if form.is_valid():
-            tweet = form.save(commit=False)
-            tweet.tweet_author = MyUser.objects.get(id=request.user.id)
-            tweet.save()
-            notify_user(tweet)
+        tweet = form.save(commit=False)
+        tweet.tweet_author = MyUser.objects.get(id=request.user.id)
+        tweet.save()
+        notify_user(tweet)
+        form.save()
         return HttpResponseRedirect(reverse('homepage'))
-    notifications = Notification.objects.filter(receiving_user=request.user)
-    form = TweetForm()
 
-    return render(request, html, {'form': form, 'notifications': notifications})
+    def get(self, request, *args, **kwargs):
+        notifications = Notification.objects.filter(receiving_user=request.user)
+        form = TweetForm()
+        return render(request, 'compose_tweet_form.html', {'form': form, 'notifications': notifications})
 
 
-def tweetdetail(request, tweetdetail_id):
-    tweetdetail = Tweet.objects.get(id=tweetdetail_id)
-    return render(request, 'tweetdetail.html', {'tweetdetail': tweetdetail})
+# class-based view conversion
+class Tweetdetail(DetailView):
+    model = Tweet
+    context_object_name = 'tweetdetail'
+
+    def get(self, request, tweetdetail_id):
+        tweetdetail = Tweet.objects.get(id=tweetdetail_id)
+        return render(request, 'tweetdetail.html', {'tweetdetail': tweetdetail})

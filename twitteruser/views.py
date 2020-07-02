@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
+from django.views.generic.detail import DetailView
 
 from twitteruser.models import MyUser
 from tweet.models import Tweet
@@ -16,19 +17,27 @@ def index(request):
     return render(request, 'index.html', {'tweetdetail': tweetdetail, 'tweetcount': tweetcount})
 
 
-def profile_page(request, id):
-    otheruser = MyUser.objects.get(id=id)
-    tweetdetail = Tweet.objects.filter(tweet_author=otheruser)
-    tweetcount = Tweet.objects.filter(tweet_author=request.user)
-    return render(request, 'profile_page.html', {'otheruser': otheruser, 'tweetdetail': tweetdetail, 'tweetcount': tweetcount})
+# class-based view conversion
+class Profilepage(DetailView):
+    model = MyUser
+    context_object_name = 'otheruser'
+
+    def get(self, request, id):
+        otheruser = MyUser.objects.get(id=id)
+        tweetdetail = Tweet.objects.filter(tweet_author=otheruser)
+        tweetcount = Tweet.objects.filter(tweet_author=request.user)
+        return render(request, 'profile_page.html', {'otheruser': otheruser, 'tweetdetail': tweetdetail, 'tweetcount': tweetcount})
 
 
-def follow(request, id):
-    user_to_follow = MyUser.objects.get(id=id)
-    current_user = MyUser.objects.get(id=request.user.id)
-    current_user.followingg.add(user_to_follow)
-    current_user.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+# class-based view conversion
+class Follow(DetailView):
+
+    def get(self, request, id):
+        user_to_follow = MyUser.objects.get(id=id)
+        current_user = MyUser.objects.get(id=request.user.id)
+        current_user.followingg.add(user_to_follow)
+        current_user.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def unfollow(request, id):
